@@ -30,7 +30,6 @@ use crate::{
 };
 use std::fmt::Debug;
 
-#[doc(hidden)]
 pub fn visit_all_rules<'a, S: Debug>(ctx: &mut ValidatorContext<'a, S>, doc: &'a Document<S>)
 where
     S: ScalarValue,
