@@ -115,6 +115,11 @@ where
             .and_then(|args| args.get(key))
             .and_then(InputValue::convert)
     }
+
+    /// Get an interator over the arg values
+    pub fn iter(&self) -> Option<impl Iterator<Item = (&&str, &InputValue<S>)>> {
+        self.args.as_ref().map(|args| args.iter())
+    }
 }
 
 /// Primary trait used to resolve GraphQL values.

@@ -118,14 +118,14 @@ pub use juniper_codegen::{
 mod value;
 #[macro_use]
 mod macros;
-mod ast;
-mod executor;
+pub mod ast;
+pub mod executor;
 mod introspection;
 pub mod parser;
 pub(crate) mod schema;
 mod types;
 mod util;
-mod validation;
+pub mod validation;
 // This needs to be public until docs have support for private modules:
 // https://github.com/rust-lang/cargo/issues/1520
 pub mod http;
