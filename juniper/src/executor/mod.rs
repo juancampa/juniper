@@ -594,7 +594,7 @@ where
     }
 
     /// `Executor`'s current selection set
-    pub(crate) fn current_selection_set(&self) -> Option<&[Selection<'a, S>]> {
+    pub fn current_selection_set(&self) -> Option<&[Selection<'a, S>]> {
         self.current_selection_set
     }
 
