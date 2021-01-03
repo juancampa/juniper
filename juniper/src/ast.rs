@@ -526,6 +526,99 @@ impl<'a, S> VariableDefinitions<'a, S> {
     }
 }
 
+
+// Added for Membrane
+impl<'a, S> std::fmt::Display for Definition<'a, S> where S: ScalarValue {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    match self {
+      Definition::Operation(Spanning { item, .. }) => item.fmt(f),
+      Definition::Fragment(Spanning { item, .. }) => todo!(),
+    }
+  }
+}
+
+impl<'a, S> std::fmt::Display for Operation<'a, S> where S: ScalarValue {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    write!(f, "{}", self.operation_type);
+    if let Some(Spanning { item, .. }) = self.name {
+      write!(f, "{}", item);
+    }
+    if let Some(_) = self.variable_definitions {
+      todo!()
+    }
+    if let Some(_) = self.directives {
+      todo!()
+    }
+    write!(f, " {{ ");
+    for selection in &self.selection_set {
+      write!(f, "{} ", selection);
+    }
+    write!(f, "}}")
+  }
+}
+
+impl std::fmt::Display for OperationType {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    match self {
+      OperationType::Query => write!(f, "query"),
+      _ => todo!(),
+    }
+  }
+}
+
+impl<'a, S> std::fmt::Display for Selection<'a, S> where S: ScalarValue {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    match self {
+      Selection::Field(Spanning { item, .. }) => write!(f, "{}", item),
+      _ => todo!(),
+    }
+  }
+}
+
+impl<'a, S> std::fmt::Display for Field<'a, S> where S: ScalarValue {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    if let Some(Spanning { item: alias, .. }) = self.alias {
+      write!(f, "{}: ", alias);
+    }
+    write!(f, "{}", self.name.item);
+    if let Some(directives) = &self.directives {
+      todo!()
+    }
+    if let Some(Spanning { item: arguments, .. }) = &self.arguments {
+      write!(f, "{}", arguments);
+    }
+    if let Some(selection_set) = &self.selection_set {
+      if !selection_set.is_empty() {
+        write!(f, " {{ ");
+        for selection in selection_set {
+          write!(f, "{} ", selection);
+        }
+        write!(f, "}}");
+      }
+    }
+    Ok(())
+  }
+}
+
+impl<'a, S> std::fmt::Display for Arguments<'a, S> where S: ScalarValue {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    if self.items.is_empty() {
+      return Ok(());
+    }
+    write!(f, "(");
+    for (i, (key, value)) in self.items.iter().enumerate() {
+      let Spanning { item: key, .. } = key;
+      let Spanning { item: value, .. } = value;
+      write!(f, "{}: {}", key, value);
+      if i < self.items.len() - 1 {
+        write!(f, ", ");
+      }
+    }
+    write!(f, ")")
+  }
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::InputValue;
