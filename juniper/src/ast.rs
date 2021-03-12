@@ -453,7 +453,9 @@ where
             InputValue::Null => write!(f, "null"),
             InputValue::Scalar(ref s) => {
                 if let Some(s) = s.as_str() {
-                    write!(f, "\"{}\"", s)
+                    // NOTE: this forces us to compile with the `serde_json` feature but I can't
+                    // think of an easier way to escape it
+                    write!(f, "{}", serde_json::json!(s).to_string())
                 } else {
                     write!(f, "{}", s)
                 }
